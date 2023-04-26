@@ -1,0 +1,6 @@
+/output/
+*.png
+*.jpg
+*.json
+tmp.out
+assets/

@@ -49,5 +49,4 @@ for path in data:
     # render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --depth --resolution 400 > tmp.out' % (
     #     opt.blender_root, path, opt.save_folder
     # )
-    
     break

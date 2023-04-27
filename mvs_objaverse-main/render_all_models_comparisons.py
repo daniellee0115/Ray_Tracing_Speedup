@@ -9,7 +9,7 @@ import re
 user = "Caroline"
 
 if user == "Daniel":
-    out_path = '/Users/jaeyounglee/Desktop/CS231N_Final_Project'
+    out_path = '/Users/jaeyounglee/Desktop/CS231N_Final_Project/output'
     in_path = '/Users/jaeyounglee/.objaverse/hf-objaverse-v1/glbs'
     blender_path = '/Applications/Blender.app/Contents/MacOS/Blender'
 

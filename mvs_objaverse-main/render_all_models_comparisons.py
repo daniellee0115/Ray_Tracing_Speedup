@@ -13,7 +13,7 @@ if user == "Daniel":
     blender_path = '/Applications/Blender.app/Contents/MacOS/Blender'
 
 elif user == "Caroline":
-    out_path = '/Users/carolinecahilly/Desktop/mvs_objaverse-main/output'
+    out_path = '/Users/carolinecahilly/Documents/cs231n_final_project/mvs_objaverse-main/output'
     in_path = '/Users/carolinecahilly/.objaverse/hf-objaverse-v1/glbs/'
     blender_path = '/Applications/Blender.app/Contents/MacOS/Blender'
 

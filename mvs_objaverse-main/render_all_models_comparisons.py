@@ -15,7 +15,7 @@ if user == "Daniel":
 elif user == "Caroline":
     out_path = '/Users/carolinecahilly/Desktop/mvs_objaverse-main/output'
     in_path = '/Users/carolinecahilly/.objaverse/hf-objaverse-v1/glbs/'
-    blender_loc = '/Applications/Blender.app/Contents/MacOS/Blender'
+    blender_path = '/Applications/Blender.app/Contents/MacOS/Blender'
 
 parser = argparse.ArgumentParser(description='Renders glbs')
 parser.add_argument(

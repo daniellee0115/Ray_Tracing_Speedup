@@ -4,6 +4,7 @@ Renders all of the data in the folder_assets with eevee and cycles.
 
 import os
 import argparse
+import re
 
 user = "Caroline"
 
@@ -34,23 +35,24 @@ opt = parser.parse_args()
 import glob 
 
 all_data = sorted(glob.glob(f"{opt.folder_assets}/*/"))
-count = []
-iterator = 0
+
 for obj in range(len(all_data)):
     data = all_data[obj]
     folder = sorted(glob.glob(data + "/*.glb"))
     for path in folder:
-        os.makedirs(opt.save_folder + "mug_" + str(obj) + "_eevee",exist_ok=True)
-        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --resolution 400 --add_floor --engine BLENDER_EEVEE' % (
-            opt.blender_root, path, opt.save_folder + "mug_" + str(obj) + "_eevee"
+        regex = re.match('.*(000-\d\d\d)/(.*).glb', path)
+        pathName = regex.group(1)+'-'+regex.group(2)
+        os.makedirs(opt.save_folder + "_mug_" + str(pathName) + "_eevee",exist_ok=True)
+        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 1 --resolution 400 --add_floor --engine BLENDER_EEVEE' % (
+            opt.blender_root, path, opt.save_folder + "_mug_" + str(pathName) + "_eevee"
         )
         print(render_cmd)
         os.system(render_cmd)
         print("EEVEE DONE")
 
-        os.makedirs(opt.save_folder + "mug_" + str(obj) + "_cycles",exist_ok=True)
-        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --resolution 400 --add_floor --engine CYCLES' % (
-            opt.blender_root, path, opt.save_folder + "mug_" + str(obj) + "_cycles"
+        os.makedirs(opt.save_folder + "_mug_" + str(pathName) + "_cycles",exist_ok=True)
+        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 1 --resolution 400 --add_floor --engine CYCLES' % (
+            opt.blender_root, path, opt.save_folder + "_mug_" + str(pathName) + "_cycles"
         )
         print(render_cmd)
         os.system(render_cmd)

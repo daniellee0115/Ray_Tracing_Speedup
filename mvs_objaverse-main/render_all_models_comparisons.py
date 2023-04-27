@@ -35,8 +35,7 @@ import glob
 
 all_data = sorted(glob.glob(f"{opt.folder_assets}/*/"))
 
-# for obj in range(len(all_data)):
-for obj in range(1):
+for obj in range(len(all_data)):
     data = all_data[obj:]
     
     for path in data:
@@ -52,7 +51,7 @@ for obj in range(1):
 
 
         os.makedirs(opt.save_folder + "mug_" + str(obj) + "_eevee",exist_ok=True)
-        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 50 --resolution 400 --add_floor --engine BLENDER_EEVEE' % (
+        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --resolution 400 --add_floor --engine BLENDER_EEVEE' % (
             opt.blender_root, path, opt.save_folder + "mug_" + str(obj) + "_eevee"
         )
         print(render_cmd)
@@ -60,7 +59,7 @@ for obj in range(1):
         print("EEVEE DONE")
 
         os.makedirs(opt.save_folder + "mug_" + str(obj) + "_cycles",exist_ok=True)
-        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 50 --resolution 400 --add_floor --engine CYCLES' % (
+        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --resolution 400 --add_floor --engine CYCLES' % (
             opt.blender_root, path, opt.save_folder + "mug_" + str(obj) + "_cycles"
         )
         print(render_cmd)

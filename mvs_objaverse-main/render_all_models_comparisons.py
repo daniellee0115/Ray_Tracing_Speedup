@@ -43,7 +43,7 @@ for obj in range(len(all_data)):
         regex = re.match('.*(000-\d\d\d)/(.*).glb', path)
         pathName = regex.group(1)+'-'+regex.group(2)
         os.makedirs(opt.save_folder + "_mug_" + str(pathName) + "_eevee",exist_ok=True)
-        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 1 --resolution 400 --add_floor --engine BLENDER_EEVEE' % (
+        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --resolution 400 --add_floor --engine BLENDER_EEVEE' % (
             opt.blender_root, path, opt.save_folder + "_mug_" + str(pathName) + "_eevee"
         )
         print(render_cmd)
@@ -51,13 +51,12 @@ for obj in range(len(all_data)):
         print("EEVEE DONE")
 
         os.makedirs(opt.save_folder + "_mug_" + str(pathName) + "_cycles",exist_ok=True)
-        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 1 --resolution 400 --add_floor --engine CYCLES' % (
+        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --resolution 400 --add_floor --engine CYCLES' % (
             opt.blender_root, path, opt.save_folder + "_mug_" + str(pathName) + "_cycles"
         )
         print(render_cmd)
         os.system(render_cmd)
         print("CYCLES DONE")
-        # render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --depth --resolution 400 > tmp.out' % (
-        #     opt.blender_root, path, opt.save_folder
-        # )
-        break
+        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --depth --resolution 400 > tmp.out' % (
+            opt.blender_root, path, opt.save_folder
+        )

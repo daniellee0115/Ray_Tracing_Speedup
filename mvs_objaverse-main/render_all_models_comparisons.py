@@ -13,7 +13,7 @@ if user == "Daniel":
     blender_path = '/Applications/Blender.app/Contents/MacOS/Blender'
 
 elif user == "Caroline":
-    out_path = '/Users/carolinecahilly/Documents/cs231n_final_project/mvs_objaverse-main/output'
+    out_path = '/Users/carolinecahilly/Documents/cs231n_final_project/mvs_objaverse-main/output/'
     in_path = '/Users/carolinecahilly/.objaverse/hf-objaverse-v1/glbs/'
     blender_path = '/Applications/Blender.app/Contents/MacOS/Blender'
 
@@ -35,8 +35,8 @@ import glob
 
 all_data = sorted(glob.glob(f"{opt.folder_assets}/*/"))
 
-for obj in range(len(all_data)):
-
+# for obj in range(len(all_data)):
+for obj in range(1):
     data = all_data[obj:]
     
     for path in data:
@@ -51,17 +51,17 @@ for obj in range(len(all_data)):
         # os.system(render_cmd)
 
 
-        os.makedirs(opt.save_folder + "_eevee_" + str(obj),exist_ok=True)
-        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 10 --resolution 400 --add_floor --engine BLENDER_EEVEE' % (
-            opt.blender_root, path, opt.save_folder + "_eevee_" + str(obj)
+        os.makedirs(opt.save_folder + "mug_" + str(obj) + "_eevee",exist_ok=True)
+        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --resolution 400 --add_floor --engine BLENDER_EEVEE' % (
+            opt.blender_root, path, opt.save_folder + "mug_" + str(obj) + "_eevee"
         )
         print(render_cmd)
         os.system(render_cmd)
         print("EEVEE DONE")
 
-        os.makedirs(opt.save_folder + "_cycles_" + str(obj),exist_ok=True)
-        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 10 --resolution 400 --add_floor --engine CYCLES' % (
-            opt.blender_root, path, opt.save_folder + "_cycles_" + str(obj)
+        os.makedirs(opt.save_folder + "mug_" + str(obj) + "_cycles",exist_ok=True)
+        render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --resolution 400 --add_floor --engine CYCLES' % (
+            opt.blender_root, path, opt.save_folder + "mug_" + str(obj) + "_cycles"
         )
         print(render_cmd)
         os.system(render_cmd)

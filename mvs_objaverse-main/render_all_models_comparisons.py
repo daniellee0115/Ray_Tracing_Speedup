@@ -9,7 +9,7 @@ user = "Caroline"
 
 if user == "Daniel":
     out_path = '/Users/jaeyounglee/Desktop/CS231N_Final_Project'
-    in_path = '/Users/jaeyounglee/Desktop/CS231N_Final_Project'
+    in_path = '/Users/jaeyounglee/.objaverse/hf-objaverse-v1/glbs'
     blender_path = '/Applications/Blender.app/Contents/MacOS/Blender'
 
 elif user == "Caroline":
@@ -34,22 +34,12 @@ opt = parser.parse_args()
 import glob 
 
 all_data = sorted(glob.glob(f"{opt.folder_assets}/*/"))
-
+count = []
+iterator = 0
 for obj in range(len(all_data)):
-    data = all_data[obj:]
-    
-    for path in data:
-        # path = data[-5]
-        path = sorted(glob.glob(path + "/*.glb"))[0]
-
-        # render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --resolution 400' % (
-        #     opt.blender_root, path, opt.save_folder
-        # )
-
-        # print(render_cmd)
-        # os.system(render_cmd)
-
-
+    data = all_data[obj]
+    folder = sorted(glob.glob(data + "/*.glb"))
+    for path in folder:
         os.makedirs(opt.save_folder + "mug_" + str(obj) + "_eevee",exist_ok=True)
         render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --resolution 400 --add_floor --engine BLENDER_EEVEE' % (
             opt.blender_root, path, opt.save_folder + "mug_" + str(obj) + "_eevee"

@@ -6,6 +6,11 @@ import os
 import argparse
 import re
 import gltf
+from PIL import Image
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Image as PLImage, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+import glob 
 
 user = "Caroline"
 
@@ -36,57 +41,84 @@ parser.add_argument(
     help='path to blender executable')
 opt = parser.parse_args()
 
-
-
-# get all the file
-import glob 
-
-all_data = sorted(glob.glob(f"{opt.folder_assets}/*/"))
-
-def get_materials_from_glb(file_path):
+def is_glossy(file_path):
     glb = gltf.GLTF.load(file_path)
-    materials = []
+    glossy = False
     
     for material in glb.materials:
-        # Extract material properties
-        # name = material.metallic
-        # print(material.glossiness_factor) # dir(material)
-        print(dir(material))
-        # You can access other properties such as base color, metallic, roughness, etc.
-        # using material.base_color, material.metallic, material.roughness, etc.
-        
-        # materials.append(name)  # Append the material name to the list
+        if material.glossiness_factor != None and material.glossiness_factor > 0:
+            glossy = True
     
-    return materials
+    return glossy
 
-my_set = set()
-for obj in range(len(all_data)):
-    data = all_data[obj]
-    folder = sorted(glob.glob(data + "/*.glb"))
-    for path in folder:
+def is_metallic(file_path):
+    glb = gltf.GLTF.load(file_path)
+    metallic = False
+    
+    for material in glb.materials:
+        if material.metallic_factor != None and material.metallic_factor > 0:
+            metallic = True
+    
+    return metallic
+
+def create_pdf_with_paths(image_paths, output_path):
+    doc = SimpleDocTemplate(output_path, pagesize=letter)
+    elements = []
+
+    # Define the styles for the paths
+    styles = getSampleStyleSheet()
+    path_style = styles["Normal"]
+
+    # Add each image and its path to the PDF
+    for path in image_paths:
+        # Open the image and get its dimensions
+        image = Image.open(path)
+        width, height = image.size
+
+        # Add the image to the elements list
+        elements.append(PLImage(path, width=width, height=height))
+
+        # Add the path as a paragraph
+        path_paragraph = Paragraph(path, path_style)
+        elements.append(path_paragraph)
+
+    doc.build(elements)
+    print(f"Final PDF saved to '{output_path}'.")
+
+def get_paths(feature, p):
+    all_data = sorted(glob.glob(f"{opt.folder_assets}/*/*"))
+    print(len(all_data))
+
+    indices = []
+    for idx in range(len(all_data)):
+        path = all_data[idx]
+
+        if feature=="metallic":
+            b = is_metallic(path)
+        else:
+            b = is_glossy(path)
+
+        if b:
+            indices.append(idx)
+
+    paths = []
+    for i in indices:
+        paths.append(p + "mug_" + str(i) + "_cycles/" + "080.png")
+
+    return paths
+
+# Example usage
+
+path_to_images_folder = "/Users/carolinecahilly//Desktop/231n/mvs_objaverse-main/images/"
+
+paths_g = get_paths("glossy", path_to_images_folder)
+paths_m = get_paths("metallic", path_to_images_folder)
+output_path_m = "metallic_examples.pdf"
+output_path_g = "glossy_examples.pdf"
+
+create_pdf_with_paths(paths_m, output_path_m)
+create_pdf_with_paths(paths_g, output_path_g)
+
+
+
         
-        for m in get_materials_from_glb(path):
-            my_set.add(m)
-
-
-        # os.makedirs(opt.save_folder + "_mug_" + str(pathName) + "_eevee",exist_ok=True)
-        # render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --resolution 400 --add_floor --engine BLENDER_EEVEE' % (
-        #     opt.blender_root, path, opt.save_folder + "_mug_" + str(pathName) + "_eevee"
-        # )
-        # print(render_cmd)
-        # os.system(render_cmd)
-        # print("EEVEE DONE")
-
-        # os.makedirs(opt.save_folder + "_mug_" + str(pathName) + "_cycles",exist_ok=True)
-        # render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --resolution 400 --add_floor --engine CYCLES' % (
-        #     opt.blender_root, path, opt.save_folder + "_mug_" + str(pathName) + "_cycles"
-        # )
-        # print(render_cmd)
-        # os.system(render_cmd)
-        # print("CYCLES DONE")
-        # render_cmd = '%s -b -P rendering/render_blender.py -- --obj %s --output %s --views 100 --depth --resolution 400 > tmp.out' % (
-        #     opt.blender_root, path, opt.save_folder
-        # )
-
-print(my_set)
-print(len(my_set))
